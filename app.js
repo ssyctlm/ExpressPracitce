@@ -1,7 +1,9 @@
 const express = require('express');
 const path = require('path');
+const exphbs = require('express-handlebars');
 const members = require("./Members");
-const logger = require("./Middleware/logger")
+const logger = require("./Middleware/logger");
+
 
 
 //* Json states //Moved to a separated file
@@ -48,6 +50,19 @@ const app = express();
 //   res.sendFile(path.join(__dirname,'public','index.html'))
 // })
 
+
+//* middleware body parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: false}));
+
+//* middleware express handlebars
+
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
+ 
+
+//* express handlebars Homepage Route
+app.get('/',(req,res)=>res.render('index',{title:'Member APP',members}))
 
 //* Set a static folder
 app.use(express.static(path.join(__dirname,'public')))
